@@ -12,6 +12,9 @@ import FeedbackItem from '@/components/FeedbackItem.vue'
 const userInput = ref('')
 const feedbackList: Ref<Feedback[]> = ref([])
 
+// create a function to return current year
+const getCurrentYear = () => new Date().getFullYear()
+
 // actions
 const addFeedbackItem = () => {
   feedbackList.value.push({ id: feedbackList.value.length + 1, content: userInput.value })
@@ -75,6 +78,17 @@ onMounted(() => {
       />
     </ScrollArea>
   </main>
+  <footer class="py-4">
+    <p class="text-center text-xs text-slate-400">
+      © {{ getCurrentYear() }} by Matthew Littrell. Repo available on
+      <a
+        href="https://github.com/digidevguy/feedback-hub"
+        target="_blank"
+        class="text-emerald-400 hover:underline"
+        >Github</a
+      >
+    </p>
+  </footer>
   <Toaster position="bottom-center" theme="dark" />
 </template>
 
