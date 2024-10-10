@@ -16,13 +16,17 @@ const getCurrentYear = () => new Date().getFullYear()
 
 // actions
 const addFeedbackItem = () => {
-  if (!userInput.value) return
+  if (!userInput.value || userInput.value.trim() === '') {
+    return toast('Please enter feedback to add!')
+  }
   feedbackList.value.push(userInput.value)
   userInput.value = ''
+  toast('Feedback added!')
 }
 
 const deleteFeedbackItem = (str: string) => {
   feedbackList.value = feedbackList.value.filter((item) => item !== str)
+  toast('Feedback deleted!')
 }
 
 const copyFeedbackToClipboard = (str: string) => {
