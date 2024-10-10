@@ -1,7 +1,5 @@
 <script setup lang="ts">
-const { content } = defineProps<{
-  content: string
-}>()
+const { feedback } = defineProps({ feedback: String })
 import IconBin from '@/components/icons/IconBin.vue'
 import IconCopy from '@/components/icons/IconCopy.vue'
 import { Button } from '@/components/ui/button'
@@ -11,7 +9,7 @@ import { Button } from '@/components/ui/button'
   <div
     class="flex justify-between gap-4 items-center w-full border border-slate-700/50 py-2 px-4 rounded-md mb-4 last:mb-0 transition-all duration-75 ease-in-out"
   >
-    <p>{{ content }}</p>
+    <p>{{ feedback }}</p>
     <div class="flex flex-col space-y-4">
       <Button
         variant="ghost"

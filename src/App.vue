@@ -1,35 +1,35 @@
 <script setup lang="ts">
 import { ref, type Ref, onMounted, watch } from 'vue'
-import type { Feedback } from './types'
-import { Toaster } from './components/ui/sonner'
 import { toast } from 'vue-sonner'
+
+import FeedbackItem from '@/components/FeedbackItem.vue'
+import { Toaster } from './components/ui/sonner'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 
-import FeedbackItem from '@/components/FeedbackItem.vue'
-
 //state
-const userInput = ref('')
-const feedbackList: Ref<Feedback[]> = ref([])
+const userInput: Ref<string> = ref('')
+const feedbackList: Ref<string[]> = ref([])
 
 // create a function to return current year
 const getCurrentYear = () => new Date().getFullYear()
 
 // actions
 const addFeedbackItem = () => {
-  feedbackList.value.push({ id: feedbackList.value.length + 1, content: userInput.value })
+  if (!userInput.value) return
+  feedbackList.value.push(userInput.value)
   userInput.value = ''
 }
 
-const deleteFeedbackItem = (id: number) => {
-  feedbackList.value = feedbackList.value.filter((item) => item.id !== id)
+const deleteFeedbackItem = (str: string) => {
+  feedbackList.value = feedbackList.value.filter((item) => item !== str)
 }
 
-const copyFeedbackToClipboard = (id: number) => {
-  const feedback = feedbackList.value.find((item) => item.id === id)
+const copyFeedbackToClipboard = (str: string) => {
+  const feedback = feedbackList.value.find((item) => item === str)
 
   if (!feedback) return
-  navigator.clipboard.writeText(feedback?.content)
+  navigator.clipboard.writeText(feedback)
   toast('Feedback copied!')
 }
 
@@ -45,7 +45,7 @@ watch(
 // lifecycle
 onMounted(() => {
   const feedback = localStorage.getItem('feedback')
-  feedback ? (feedbackList.value = JSON.parse(feedback)) : (feedbackList.value = [])
+  feedbackList.value = feedback ? JSON.parse(feedback) : []
 })
 </script>
 
@@ -70,11 +70,11 @@ onMounted(() => {
   <main class="flex">
     <ScrollArea class="w-full lg:max-h-[600px] rounded-md p-4 space-y-4" type="scroll">
       <FeedbackItem
-        v-for="{ id, content } of feedbackList"
-        :key="id"
-        :content="content"
-        @copy="copyFeedbackToClipboard(id)"
-        @delete="deleteFeedbackItem(id)"
+        v-for="feedback of feedbackList"
+        :key="feedback"
+        :feedback="feedback"
+        @copy="copyFeedbackToClipboard(feedback)"
+        @delete="deleteFeedbackItem(feedback)"
       />
     </ScrollArea>
   </main>
